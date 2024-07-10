@@ -6,9 +6,11 @@ import { AppDataSource } from './config/data-source';
 import { UserModule } from './modules/users/users.module';
 import { OrganisationModule } from './modules/organisation/organisation.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuardModule } from './auth-guard/auth-guard.module';
+import { PassportModule } from '@nestjs/passport';
+
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => ({
         type: 'postgres',
@@ -28,7 +30,6 @@ import { AuthGuardModule } from './auth-guard/auth-guard.module';
     // UserModule,
     OrganisationModule,
     AuthModule,
-    AuthGuardModule
   ],
   controllers: [AppController],
   providers: [AppService],

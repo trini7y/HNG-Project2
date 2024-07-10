@@ -25,4 +25,16 @@ export class OrganisationService {
          organisation.users = [creator];
          return this.organisationRepository.save(organisation);
   }
+
+  async getUserOrganisation(userId){
+    const getUserOrganisation = await this.organisationRepository
+      .createQueryBuilder('organisation')
+      .leftJoinAndSelect('organisation.users', 'users')
+      .leftJoinAndSelect('organisation.creator', 'creator')
+      .where('users.UserId = :userId OR creator.id = :userId', { userId: userId })
+      .getMany();
+
+    console.log(getUserOrganisation)
+    return getUserOrganisation
+  }
 }
