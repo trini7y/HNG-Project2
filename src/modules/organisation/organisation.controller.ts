@@ -13,9 +13,18 @@ export class OrganisationController {
   @Get()
   @UseGuards(AuthGuard)
   async getUserOrganizations(@Req() req) {
-    console.log('request',req);
-    const userId = req.user.id;
-    console.log(req)
-    return await this.organisationService.getUserOrganisation(userId);
+    const userId = req.user['userId'];
+    const organisations =  await this.organisationService.getUserOrganisation(userId);
+     return {
+      status: 'success',
+      message: 'Organisations fetched successfully',
+      data: {
+        organisations: organisations.map(org => ({
+          orgId: org.orgId,
+          name: org.name,
+          description: org.description,
+        })),
+      },
+    };
   }
 }

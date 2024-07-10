@@ -69,6 +69,11 @@ export class UserService {
     }
   }
 
+  async getUserById(userId: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { userId } });
+    return user
+  }
+
   async isEmailTaken(email: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { email } });
     return !!user;
