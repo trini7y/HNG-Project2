@@ -38,7 +38,7 @@ export class UserController {
       const user = await this.userService.getUserById(userId);
       return {
         status: 'success',
-        message: 'User data fetched successfully',
+        message: 'User organisation data fetched successfully',
         data: {
           userId: user.userId,
           firstName: user.firstName,
