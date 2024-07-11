@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { CreateOrganisationDto } from "src/libs/dto/create-organisation.dto";
-import { OrganisationDto } from "src/libs/dto/organization.dto";
-import { Organisation } from "src/libs/entities/organisation.entity";
-import { User } from "src/libs/entities/users/users.entity";
-import { Repository } from "typeorm";
-
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateOrganisationDto } from 'src/libs/dto/create-organisation.dto';
+import { OrganisationDto } from 'src/libs/dto/organization.dto';
+import { Organisation } from 'src/libs/entities/organisation.entity';
+import { User } from 'src/libs/entities/users/users.entity';
+import { Repository } from 'typeorm';
+import { UserService } from '../users/users.service';
 
 @Injectable()
 export class OrganisationService {
@@ -63,20 +63,58 @@ export class OrganisationService {
     createOrganisationDto: CreateOrganisationDto,
     userId: string,
   ): Promise<Organisation> {
-    const user = await this.userRepository.findOne({ where: { userId } });
+    try {
+      const user = await this.userRepository.findOne({ where: { userId } });
 
-    if (!user) {
-      throw new Error(`User with id ${userId} not found.`);
+      if (!user) {
+        throw new Error(`User with id ${userId} not found.`);
+      }
+      const { name, description } = createOrganisationDto;
+
+      const organisation = new Organisation();
+      organisation.name = name;
+      organisation.description = description;
+      organisation.creator = user;
+
+      await this.organisationRepository.save(organisation);
+
+      return organisation;
+    } catch (error) {
+      console.log(error);
     }
-    const { name, description } = createOrganisationDto;
+  }
 
-    const organisation = new Organisation();
-    organisation.name = name;
-    organisation.description = description;
-    organisation.creator = user;
+  async addUserToOrganisation(orgId: string, userId: string) {
+    const organisation = await this.organisationRepository.findOne({
+      where: { orgId },
+    });
+    if (!organisation) {
+      return {
+        status: 'success',
+        message: 'Organisation not found',
+      };
+    }
 
+    const user = await this.userRepository.findOne({ where: { userId } });
+    if (!user) {
+      return {
+        status: 'success',
+        message: 'User not found',
+      };
+    }
+    if (!organisation.users) {
+      organisation.users = [];
+    }
+
+    organisation.users.push(user);
     await this.organisationRepository.save(organisation);
-
-    return organisation;
+    return {
+      status: 'success',
+      message: 'User added to organisation successfully',
+    };
+  }
+  async getUserById(userId: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { userId } });
+    return user;
   }
 }

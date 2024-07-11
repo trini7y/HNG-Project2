@@ -17,9 +17,7 @@ export class AuthController {
 
   @Public()
   @Post('login')
-//   @HttpCode(HttpStatus.OK)
   login(@Body() payload: loginDto) {
-    console.log("Payload from controller", payload)
     const user = this.authService.login(payload);
     if(!user) throw new HttpException('Invalid Credential', 401);
     return user

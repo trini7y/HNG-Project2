@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { OrganisationService } from './organisation.service';
 import { AuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateOrganisationDto } from 'src/libs/dto/create-organisation.dto';
@@ -28,10 +28,7 @@ export class OrganisationController {
 
   @Get(':orgId')
   @UseGuards(AuthGuard)
-  async getOrganisation(
-    @Param('orgId') orgId: string,
-    @Req() req,
-  ) {
+  async getOrganisation(@Param('orgId') orgId: string, @Req() req) {
     const user = req.user['userId'];
     const organisation = await this.organisationService.getOrganisationById(
       orgId,
@@ -54,7 +51,8 @@ export class OrganisationController {
     @Body() createOrganisationDto: CreateOrganisationDto,
     @Req() req,
   ) {
-    const userId = req.user['userId'];
+  try{
+      const userId = req.user['userId'];
     const organisation = await this.organisationService.create(
       createOrganisationDto,
       userId,
@@ -69,5 +67,28 @@ export class OrganisationController {
         description: organisation.description,
       },
     };
+  }catch(error){
+      return {
+        status: 'Bad Request',
+        message: 'Client error',
+        statusCode: 400,
+      };
+    }
+  }
+
+  @Post(':orgId/users')
+  async addUserToOrganisation(
+    @Param('orgId') orgId: string,
+    @Body('userId') userId: string,
+  ) {
+    try {
+      return await this.organisationService.addUserToOrganisation(orgId, userId);
+
+     }catch (error) {
+      return{
+        status: 'error',
+        message: error.message,
+      }
+    }
   }
 }

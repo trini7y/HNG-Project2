@@ -37,8 +37,6 @@ export class UserService {
             savedUser,
             `${payload.firstName}'s Organisation`,
           );
-
-          console.log('Firstname', payload.firstName);
           this.log.debug(`Saved User ${savedUser.email}`);
 
           response = {
@@ -48,8 +46,8 @@ export class UserService {
               accessToken: accessToken,
               user: {
                 userId: savedUser.userId,
-                firstname: savedUser.firstName,
-                lastName: savedUser.lastName,
+                firstname: savedUser.firstname,
+                lastname: savedUser.lastname,
                 email: savedUser.email,
                 phone: savedUser.phone,
               },
@@ -80,11 +78,8 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    console.log("From Find Email", email)
     const user =  await this.userRepository.createQueryBuilder("users")
             .where("users.email = :email", {email: email}).getOne();
-
-    console.log('from find email', user)
     return user;
   }
 

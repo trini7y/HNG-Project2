@@ -27,7 +27,7 @@ import { PassportModule } from '@nestjs/passport';
       }),
     }),
 
-    // UserModule,
+    UserModule,
     OrganisationModule,
     AuthModule,
   ],
