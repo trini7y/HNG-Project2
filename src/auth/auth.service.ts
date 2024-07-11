@@ -27,8 +27,8 @@ export class AuthService {
               accessToken: accessToken,
               user: {
                 userId: result.userId,
-                firstname: result.firstname,
-                lastname: result.lastname,
+                firstName: result.firstName,
+                lastName: result.lastName,
                 email: result.email,
                 phone: result.phone,
               },

@@ -32,8 +32,8 @@ describe('AuthService', () => {
 
   const mockUser = {
     userId: 1,
-    firstname: 'Desmond',
-    lastname: 'Okeke',
+    firstName: 'Desmond',
+    lastName: 'Okeke',
     email: 'desmond@gmail.com',
     password: 'hashedPassword',
     phone: '1234567890',
@@ -90,8 +90,8 @@ describe('AuthService', () => {
         accessToken: token,
         user: {
           userId: mockUser.userId,
-          firstname: mockUser.firstname,
-          lastname: mockUser.lastname,
+          firstName: mockUser.firstName,
+          lastName: mockUser.lastName,
           email: mockUser.email,
           phone: mockUser.phone,
         },
@@ -102,8 +102,8 @@ describe('AuthService', () => {
     expect(bcrypt.compare).toHaveBeenCalledWith('password', 'hashedPassword');
     expect(jwtService.sign).toHaveBeenCalledWith({
       userId: mockUser.userId,
-      firstname: mockUser.firstname,
-      lastname: mockUser.lastname,
+      firstName: mockUser.firstName,
+      lastName: mockUser.lastName,
       email: mockUser.email,
       phone: mockUser.phone,
     }, { expiresIn: '60m' });

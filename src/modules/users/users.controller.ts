@@ -22,8 +22,8 @@ export class UserController {
         message: 'User data fetched successfully',
         data: {
           userId: user.userId,
-          firstName: user.firstname,
-          lastName: user.lastname,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           phone: user.phone,
         },
@@ -41,8 +41,8 @@ export class UserController {
         message: 'User organisation data fetched successfully',
         data: {
           userId: user.userId,
-          firstName: user.firstname,
-          lastName: user.lastname,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           phone: user.phone,
         },

@@ -7,10 +7,10 @@ export class User extends BaseEntity {
   userId: string;
 
   @Column({ name: 'first_name', nullable: false })
-  firstname: string;
+  firstName: string;
 
   @Column({ name: 'last_name', nullable: false })
-  lastname: string;
+  lastName: string;
 
   @Column({ unique: true, nullable: false })
   email: string;

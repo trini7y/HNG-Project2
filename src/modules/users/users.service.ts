@@ -46,8 +46,8 @@ export class UserService {
               accessToken: accessToken,
               user: {
                 userId: savedUser.userId,
-                firstname: savedUser.firstname,
-                lastname: savedUser.lastname,
+                firstName: savedUser.firstName,
+                lastName: savedUser.lastName,
                 email: savedUser.email,
                 phone: savedUser.phone,
               },
