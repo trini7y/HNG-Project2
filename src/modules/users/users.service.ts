@@ -17,7 +17,7 @@ export class UserService {
     private organisationService: OrganisationService,
   ) {}
   private readonly log = new Logger(UserService.name);
-  async createUser(payload: userDto, accessToken: string) {
+  async createUser(payload: userDto, accessToken: string): Promise<object> {
     let response: object;
     try {
       if (payload) {

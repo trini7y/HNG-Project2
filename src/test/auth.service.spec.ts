@@ -2,8 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/modules/users/users.service';
+import { OrganisationService } from 'src/modules/organisation/organisation.service';
 import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { userDto } from 'src/libs/dto/user.dto';
 
 jest.mock('bcrypt', () => ({
   compare: jest.fn(),
@@ -14,12 +16,18 @@ describe('AuthService', () => {
   let jwtService: JwtService;
   let userService: UserService;
 
-  const mockJwtService = {
-    sign: jest.fn(),
-  };
+   const mockJwtService = {
+     sign: jest.fn().mockImplementation((payload: any, options: any) => {
+       return 'mocked-jwt-token';
+     }),
+   };
 
   const mockUserService = {
     findByEmail: jest.fn(),
+  };
+
+  const organisationServiceMock = {
+    createOrganisation: jest.fn(),
   };
 
   const mockUser = {
@@ -43,12 +51,17 @@ describe('AuthService', () => {
           provide: UserService,
           useValue: mockUserService,
         },
+        {
+          provide: OrganisationService,
+          useValue: organisationServiceMock,
+        },
       ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
     jwtService = module.get<JwtService>(JwtService);
     userService = module.get<UserService>(UserService);
+
   });
 
   (bcrypt.compare as jest.Mock).mockImplementation(
@@ -93,7 +106,7 @@ describe('AuthService', () => {
       lastname: mockUser.lastname,
       email: mockUser.email,
       phone: mockUser.phone,
-    });
+    }, { expiresIn: '60m' });
   });
 
   it('should return null if email or password is missing', async () => {
@@ -101,4 +114,5 @@ describe('AuthService', () => {
     const result = await authService.login(loginDto);
     expect(result).toBeNull();
   });
+  
 });

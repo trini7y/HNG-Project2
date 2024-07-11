@@ -19,7 +19,7 @@ export class AuthService {
         const user = await this.userService.findByEmail(email);
         if (user && (await bcrypt.compare(password, user.password))) {
           const { password, ...result } = user;
-          const accessToken = this.jwtService.sign(result);
+          const accessToken = this.jwtService.sign(result, { expiresIn: '60m' });
           response = {
             status: 'success',
             message: 'Login successful',
