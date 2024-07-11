@@ -3,7 +3,7 @@ import { OrganisationService } from './organisation.service';
 import { AuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateOrganisationDto } from 'src/libs/dto/create-organisation.dto';
 
-@Controller('api/organisation')
+@Controller('api/organisations')
 export class OrganisationController {
   constructor(private readonly organisationService: OrganisationService) {}
 
